@@ -94,12 +94,13 @@ app.patch('/jokes/patch/:id', (req,res)=>{
 
 })
 
-app.get('/all', (req,res)=>{
+app.get('/getall', (req,res)=>{
   res.json(jokes)
 })
 
 //7. DELETE Specific joke
 app.delete('/jokes/delete/:id', (req,res)=>{
+
   const id = parseInt(req.params.id);    //101
   const toBeDeleted = jokes.findIndex(item => item.id  === id);  //100
   jokes.splice(toBeDeleted, 1);
@@ -110,6 +111,17 @@ app.delete('/jokes/delete/:id', (req,res)=>{
 })
 
 //8. DELETE All jokes
+app.delete('/all', (req,res)=>{
+  const userKey = req.query.key;
+  if(userKey === masterKey){
+    jokes = [];
+    res.sendStatus(200);
+  } else{
+    res
+      .status(404)
+      .json({error: `You have no power here!`})
+  }
+})
 
 app.listen(port, () => {
   console.log(`Successfully started server on port ${port}.`);
